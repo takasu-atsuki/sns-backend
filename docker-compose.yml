@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: python_django
+    image: 137737054801.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-app:v1
+    build: ./project/.
+    # env_file: ./backend/project/.env
+    volumes:
+      - ./project:/usr/src/app/
+    tty: true
+    depends_on:
+      - db
+    networks:
+      - backend_network
+  web:
+    container_name: back_nginx
+    build: ./nginx/.
+    image: 137737054801.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-web:v1
+    ports:
+      - 8080:8080
+    tty: true
+    depends_on:
+      - app
+    networks:
+      - backend_network
+  db:
+    container_name: 'sns_mysql'
+    build: ./mysql/
+    ports:
+      - 3306:3306
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sns
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - db_volumes:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+volumes:
+  db_volumes:

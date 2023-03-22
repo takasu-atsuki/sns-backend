@@ -1,0 +1,3 @@
+GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%';
+
+FLUSH PRIVILEGES;
