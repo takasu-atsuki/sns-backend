@@ -15,15 +15,15 @@ jobs:
         python-version: [3.9]
 
     env:
-    AWS_REGION: ap-northeast-1
-    ECR_REPOSITORY_BACK: sns-back-app
-    ECR_REPOSITORY_BACK_WEB: sns-back-web
-    ECS_SERVICE: sns-task-service
-    ECS_CLUSTER: sns
-    ECS_TASK_DEFINITION: sns_task.json
-    CONTAINER_NAME1: sns_back_app
-    CONTAINER_NAME2: sns_back_web
-    AWS_ROLE_ARN: arn:aws:iam::${{ secrets.ACTIONS_ROLE }}
+      AWS_REGION: ap-northeast-1
+      ECR_REPOSITORY_BACK: sns-back-app
+      ECR_REPOSITORY_BACK_WEB: sns-back-web
+      ECS_SERVICE: sns-task-service
+      ECS_CLUSTER: sns
+      ECS_TASK_DEFINITION: sns_task.json
+      CONTAINER_NAME1: sns_back_app
+      CONTAINER_NAME2: sns_back_web
+      AWS_ROLE_ARN: arn:aws:iam::${{ secrets.ACTIONS_ROLE }}
 
     permissions:
       id-token: write
