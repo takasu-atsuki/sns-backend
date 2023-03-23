@@ -1,0 +1,86 @@
+{
+  "family": "sns-task",
+  "taskRoleArn": "arn:aws:iam::AWS_IAM_ROLE_NO:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::AWS_IAM_ROLE_NO:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "sns-back-app",
+      "image": "AWS_IAM_ROLE_NO.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-app:latest",
+      "repositoryCredentials": {
+        "credentialsParameter": "arn:aws:iam::AWS_IAM_ROLE"
+      },
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp",
+          "name": "sns-back-app",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "",
+          "value": ""
+        }
+      ],
+      "secrets": [
+        {
+          "name": "",
+          "valueFrom": ""
+        }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/admin/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3
+      }
+    },
+    {
+      "name": "sns-back-web",
+      "image": "AWS_IAM_ROLE_NO.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-web:v1",
+      "repositoryCredentials": {
+        "credentialsParameter": "arn:aws:iam::AWS_IAM_ROLE"
+      },
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "name": "sns-back-web",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "dependsOn": [
+        {
+          "containerName": "sns-back-app",
+          "condition": "HEALTHY"
+        }
+      ],
+      "startTimeout": 120,
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/admin/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  }
+}
