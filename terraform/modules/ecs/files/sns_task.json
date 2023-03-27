@@ -1,0 +1,60 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "sns-back-app",
+      "image": "137737054801.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-app2:v1",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "sns_back_app-8000-tcp",
+          "containerPort": 8000,
+          "hostPort": 8000,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/admin/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3
+      }
+    },
+    {
+      "name": "sns-back-web",
+      "image": "137737054801.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-web2:v1",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "sns-back-web-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/admin/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3
+      }
+    }
+  ]
+}

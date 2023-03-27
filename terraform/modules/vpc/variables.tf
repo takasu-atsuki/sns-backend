@@ -1,0 +1,3 @@
+variable "elasticIp" {
+  type = string
+}
