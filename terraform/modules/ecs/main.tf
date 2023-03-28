@@ -12,9 +12,9 @@ data "aws_ecr_repository" "web" {
 }
 
 data "aws_caller_identity" "current" {}
-data "aws_ecs_task_definition" "new" {
-  task_definition = aws_ecs_task_definition.this.family
-}
+# data "aws_ecs_task_definition" "new" {
+#   task_definition = aws_ecs_task_definition.this.family
+# }
 
 # タスク定義
 resource "aws_ecs_task_definition" "this" {
@@ -106,8 +106,7 @@ resource "aws_ecs_task_definition" "this" {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
-
-  task_definition = data.aws_ecs_task_definition.new.arn
+  # task_definition = data.aws_ecs_task_definition.new.arn
 }
 
 # サービス
