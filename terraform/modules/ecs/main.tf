@@ -107,7 +107,7 @@ resource "aws_ecs_task_definition" "this" {
     cpu_architecture        = "X86_64"
   }
 
-  task_definition = data.data.aws_ecs_task_definition.new.arn
+  task_definition = data.aws_ecs_task_definition.new.arn
 }
 
 # サービス
