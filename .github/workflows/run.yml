@@ -111,7 +111,11 @@ jobs:
         # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
       - name: Terraform Apply
         if: github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: |
+          cd terraform/environments/prod
+          terraform apply -auto-approve
 
       - name: Terraform Dest
-        run: terraform destroy
+        run: |
+          cd terraform/environments/prod
+          terraform destroy
