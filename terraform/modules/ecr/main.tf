@@ -4,6 +4,8 @@ locals {
     "web" = 2
   }
 }
+
+# ECR(app)
 resource "aws_ecr_repository" "app" {
   name                 = var.ecr_repository_back
   image_tag_mutability = "MUTABLE"
@@ -17,6 +19,7 @@ resource "aws_ecr_repository" "app" {
   }
 }
 
+# ECR(web)
 resource "aws_ecr_repository" "web" {
   name                 = var.ecr_repository_back_web
   image_tag_mutability = "MUTABLE"
@@ -30,7 +33,8 @@ resource "aws_ecr_repository" "web" {
   }
 }
 
-resource "aws_ecr_lifecycle_policy" "foopolicy" {
+# ECR(ポリシー)
+resource "aws_ecr_lifecycle_policy" "this" {
   for_each = local.imageLifePolicy
 
   repository = each.value == 1 ? aws_ecr_repository.app.name : aws_ecr_repository.web.name
