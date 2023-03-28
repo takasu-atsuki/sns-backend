@@ -134,23 +134,23 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
 
-      # # ECRにdocker push
-      # - name: Build, tag, and push image to Amazon ECR
-      #   id: build-image
-      #   env:
-      #     ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
-      #     ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
-      #     IMAGE_TAG: latest
-      #   run: |
-      #     docker-compose down -v
-      #     cd project
-      #     docker build -t $ECR_REPOSITORY_BACK:$IMAGE_TAG .
-      #     docker push $ECR_REPOSITORY_BACK:$IMAGE_TAG
-      #     cd ../nginx
-      #     docker build -t $ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG .
-      #     docker push $ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG
-      #     echo "image_back_app=$ECR_REGISTRY_BACK/$ECR_REPOSITORY_BACK:$IMAGE_TAG"  >> $GITHUB_OUTPUT
-      #     echo "image_back_web=$ECR_REGISTRY_BACK_WEB/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      # ECRにdocker push
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
+          ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
+          IMAGE_TAG: latest
+        run: |
+          docker-compose down -v
+          cd project
+          docker build -t $ECR_REPOSITORY_BACK:$IMAGE_TAG .
+          docker push $ECR_REPOSITORY_BACK:$IMAGE_TAG
+          cd ../nginx
+          docker build -t $ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG .
+          docker push $ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG
+          echo "image_back_app=$ECR_REGISTRY_BACK/$ECR_REPOSITORY_BACK:$IMAGE_TAG"  >> $GITHUB_OUTPUT
+          echo "image_back_web=$ECR_REGISTRY_BACK_WEB/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       # Terraformで作った環境を初期化
       - name: Terraform Dest
