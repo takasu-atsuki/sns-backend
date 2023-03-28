@@ -72,7 +72,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = var.alb_target_group_arn
-    container_name   = var.web
+    container_name   = var.web_name
     container_port   = 8080
   }
 }

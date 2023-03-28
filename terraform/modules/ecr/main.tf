@@ -1,7 +1,7 @@
 locals {
   imageLifePolicy = {
-    var.ecr_repository_back     = 1
-    var.ecr_repository_back_web = 2
+    "app" = 1
+    "web" = 2
   }
 }
 resource "aws_ecr_repository" "app" {
