@@ -33,7 +33,7 @@ resource "aws_ecr_repository" "web" {
 resource "aws_ecr_lifecycle_policy" "foopolicy" {
   for_each = local.imageLifePolicy
 
-  repository = each.value == 1 ? aws_ecr_repository.sns_back_app.name : aws_ecr_repository.sns_back_web.name
+  repository = each.value == 1 ? aws_ecr_repository.app.name : aws_ecr_repository.web.name
 
   policy = <<EOF
 {
