@@ -43,19 +43,87 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      #  AWSの認証(OIDC)
+      - name: Configure AWS credentials from IAM Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          aws-region: ${{secrets.AWS_REGION}}
+
+      # AWSの環境構築(jobを分けた方がいいかも)
+      # Terraformのバージョン指定(下部でlatestでインストールしているがおいおいのため)
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{env.TF_VERSION}}
+
+      - name: Setup Terraform
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: '${{env.AWS_ROLE_ARN}}'
+          aws-region: '${{secrets.AWS_REGION}}'
+          role-duration-seconds: 900
+
+      # Terraformのフォーマット確認
+      - name: Terraform Format
+        run: |
+          cd terraform/environments/prod
+          terraform fmt -check -diff
+
+      # Terraformの初期化
+      - name: Terraform Init
+        run: |
+          cd terraform/environments/prod
+          terraform init
+
+      # Terraformのバリデーション
+      - name: Terraform Validate
+        run: |
+          cd terraform/environments/prod
+          terraform validate -no-color
+
+      # Terraformのplan確認
+      - name: Terraform Plan
+        # if: github.event_name == 'pull_request'
+        run: |
+          cd terraform/environments/prod
+          terraform plan -no-color
+
+      # TerraformでAWSの環境構築実装
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: |
+          cd terraform/environments/prod
+          terraform apply -auto-approve
+
+      #　s3に最初に必要なfileをアップロード
+      - name: s3 upload image
+        env:
+          REGION: ${{secrets.AWS_REGION}}
+          S3_BACKET: ${{secrets.AWS_S3_BACKET_NAME}}
+        run: |
+          cd project
+          aws s3 sync --delete --region $REGION ./media s3://$S3_BACKET/
+
+      #　docker-compose で テスト
       - name: docker-compose run
         run: |
           docker-compose up --build -d
           sleep 20
 
+      # テスト用DBのマイグレーション
       - name: DB migrations
         run: |
           docker ps 
           docker-compose run app python manage.py makemigrations
           docker-compose run app python manage.py migrate
+
+      # テスト用DBの初期設定
       - name: DB permission
         run: |
           docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
+
+      # テスト実行(変数の渡し方改善？)
       - name: test app
         env:
           SECRET_KEY: ${{secrets.SECRET_KEY}}
@@ -65,56 +133,7 @@ jobs:
         run: |
           docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
 
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{env.TF_VERSION}}
-
-      - name: Configure AWS credentials from IAM Role
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{env.AWS_ROLE_ARN}}
-          aws-region: ${{secrets.AWS_REGION}}
-
-      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-      - name: Setup Terraform
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: '${{env.AWS_ROLE_ARN}}'
-          aws-region: '${{secrets.AWS_REGION}}'
-          role-duration-seconds: 900
-
-      # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        run: |
-          cd terraform/environments/prod
-          terraform fmt -check -diff
-
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        run: |
-          cd terraform/environments/prod
-          terraform init
-
-      - name: Terraform Validate
-        run: |
-          cd terraform/environments/prod
-          terraform validate -no-color
-
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
-
-        # On push to main, build or change infrastructure according to Terraform configuration files
-        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
-
+      # Terraformで作った環境を初期化
       - name: Terraform Dest
         run: |
           cd terraform/environments/prod
