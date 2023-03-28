@@ -1,5 +1,5 @@
 output "private_subnet" {
-  value       = aws_subnet.private
+  value = aws_subnet.private
 }
 
 output "public_subnet" {
@@ -8,5 +8,5 @@ output "public_subnet" {
 
 output "vpc_id" {
   description = "vpc紐付けのため"
-  value = aws_vpc.this.id
+  value       = aws_vpc.this.id
 }

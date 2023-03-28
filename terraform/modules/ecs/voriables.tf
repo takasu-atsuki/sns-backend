@@ -7,11 +7,11 @@ variable "alb_target_group_arn" {
 }
 
 variable "app_name" {
-  type = string
+  type    = string
   default = "sns-back-app"
 }
 
 variable "web" {
-  type = string
+  type    = string
   default = "sns-back-web"
 }

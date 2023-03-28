@@ -1,5 +1,5 @@
-locals{
-  imageLifePolicy =  {
+locals {
+  imageLifePolicy = {
     "sns_back_app" = 1
     "sns_back_web" = 2
   }
@@ -7,7 +7,7 @@ locals{
 resource "aws_ecr_repository" "sns_back_app" {
   name                 = "sns-back-app"
   image_tag_mutability = "MUTABLE"
-  encryption_configuration{
+  encryption_configuration {
     encryption_type = "AES256"
   }
   force_delete = true
@@ -20,7 +20,7 @@ resource "aws_ecr_repository" "sns_back_app" {
 resource "aws_ecr_repository" "sns_back_web" {
   name                 = "sns-back-web"
   image_tag_mutability = "MUTABLE"
-  encryption_configuration{
+  encryption_configuration {
     encryption_type = "AES256"
   }
   force_delete = true

@@ -1,10 +1,10 @@
 variable "private_subnet" {}
-variable "vpc_id"{
+variable "vpc_id" {
   type = string
 }
 
 variable "rds_name" {
-  type = string
+  type    = string
   default = "sns-rds"
 }
 
@@ -17,7 +17,7 @@ variable "db_user" {
 }
 
 variable "mysql_version" {
-  type = string
+  type    = string
   default = "8.0.32"
 }
 

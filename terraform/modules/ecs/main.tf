@@ -16,35 +16,35 @@ data "aws_caller_identity" "current" {}
 
 # タスク定義
 resource "aws_ecs_task_definition" "this" {
-  family = "sns-app"
-  execution_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
-  task_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
-  cpu = ".25 vCPU"
-  memory = ".5 GB"
-  network_mode = "awsvpc"
+  family                   = "sns-app"
+  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
+  task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
+  cpu                      = ".25 vCPU"
+  memory                   = ".5 GB"
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   container_definitions = jsonencode([
     {
       name      = var.app_name #var.app_name
-      image     = "hoge"     #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
+      image     = "hoge"       #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
       essential = true
       portMappings = [
         {
           containerPort = 8000
           hostPort      = 8000
-          appProtocol = "http"
+          appProtocol   = "http"
         }
       ]
     },
     {
-      name      = var.web #var.web
-      image     = "hogehoge"             #"${data.aws_ecr_repository.service_image_back_web.repository_url}:latest"
+      name      = var.web    #var.web
+      image     = "hogehoge" #"${data.aws_ecr_repository.service_image_back_web.repository_url}:latest"
       essential = true
       portMappings = [
         {
           containerPort = 8080
           hostPort      = 8080
-          appProtocol = "http"
+          appProtocol   = "http"
         }
       ]
     }
@@ -58,24 +58,24 @@ resource "aws_ecs_task_definition" "this" {
 
 # サービス
 resource "aws_ecs_service" "this" {
-  name            = "sns-back-service"
-  cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = 1
+  name                   = "sns-back-service"
+  cluster                = aws_ecs_cluster.this.id
+  task_definition        = aws_ecs_task_definition.this.arn
+  desired_count          = 1
   enable_execute_command = true
-  force_new_deployment = true
-  launch_type = "FARGATE"
-  platform_version = "LATEST"
-  scheduling_strategy = "REPLICA"
+  force_new_deployment   = true
+  launch_type            = "FARGATE"
+  platform_version       = "LATEST"
+  scheduling_strategy    = "REPLICA"
 
   deployment_circuit_breaker {
-    enable = true
+    enable   = true
     rollback = true
   }
 
   network_configuration {
-    subnets = [for subnet in var.private_subnet : subnet.id]
-    security_groups = [aws_security_group.sns_back_sg.id]
+    subnets          = [for subnet in var.private_subnet : subnet.id]
+    security_groups  = [aws_security_group.sns_back_sg.id]
     assign_public_ip = true
   }
 
@@ -97,10 +97,10 @@ resource "aws_security_group" "sns_back_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port        = 8080
-    to_port          = 8080
-    protocol         = "tcp"
-    cidr_blocks      = [data.aws_vpc.selected.cidr_block]
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.selected.cidr_block]
   }
 
   egress {
