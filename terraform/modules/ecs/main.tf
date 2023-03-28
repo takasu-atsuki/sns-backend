@@ -3,30 +3,21 @@ resource "aws_ecs_cluster" "this" {
   name = "sns"
 }
 
-# ECRのレジストリの取得
-# data "aws_ecr_repository" "service_image_back_app" {
-#   name = var.app_name
-# }
-
-# data "aws_ecr_repository" "service_image_back_web" {
-#   name = var.web
-# }
-
 data "aws_caller_identity" "current" {}
 
 # タスク定義
 resource "aws_ecs_task_definition" "this" {
   family                   = "sns-app"
-  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
-  task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
+  execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
+  task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
   cpu                      = ".25 vCPU"
   memory                   = ".5 GB"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   container_definitions = jsonencode([
     {
-      name      = var.app_name #var.app_name
-      image     = "hoge"       #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
+      name      = var.app_name
+      image     = "hoge" #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
       essential = true
       portMappings = [
         {
@@ -37,7 +28,7 @@ resource "aws_ecs_task_definition" "this" {
       ]
     },
     {
-      name      = var.web    #var.web
+      name      = var.web_name
       image     = "hogehoge" #"${data.aws_ecr_repository.service_image_back_web.repository_url}:latest"
       essential = true
       portMappings = [

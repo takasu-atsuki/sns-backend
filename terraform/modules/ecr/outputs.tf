@@ -1,7 +1,7 @@
-# output "ecr_repo_sns_back_app" {
-#   value = aws_ecr_repository.sns_back_app
-# }
+output "ecr_repo_app" {
+  value = aws_ecr_repository.app
+}
 
-# output "ecr_repo_sns_back_web" {
-#   value = aws_ecr_repository.sns_back_web
-# }
+output "ecr_repo_web" {
+  value = aws_ecr_repository.web
+}

@@ -20,9 +20,11 @@ module "rds" {
   db_password    = var.DB_PASS
 }
 
-# module "ecr" {
-#   source = "../../modules/ecr"
-# }
+module "ecr" {
+  source                  = "../../modules/ecr"
+  ecr_repository_back     = var.ECR_REPOSITORY_BACK
+  ecr_repository_back_web = var.ECR_REPOSITORY_BACK_WEB
+}
 
 module "lb" {
   source                  = "../../modules/lb"
@@ -36,6 +38,9 @@ module "ecs" {
   private_subnet       = module.vpc.private_subnet
   vpc_id               = module.vpc.vpc_id
   alb_target_group_arn = module.lb.alb_target_group_arn
+  ecs_task_role        = var.ECS_TASK_ROLE
+  app_name             = module.ecr.ecr_repo_app
+  web_name             = module.ecr.ecr_repo_web
 }
 
 module "route53" {

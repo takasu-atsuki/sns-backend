@@ -1,11 +1,11 @@
 locals {
   imageLifePolicy = {
-    "sns_back_app" = 1
-    "sns_back_web" = 2
+    var.ecr_repository_back     = 1
+    var.ecr_repository_back_web = 2
   }
 }
-resource "aws_ecr_repository" "sns_back_app" {
-  name                 = "sns-back-app"
+resource "aws_ecr_repository" "app" {
+  name                 = var.ecr_repository_back
   image_tag_mutability = "MUTABLE"
   encryption_configuration {
     encryption_type = "AES256"
@@ -17,8 +17,8 @@ resource "aws_ecr_repository" "sns_back_app" {
   }
 }
 
-resource "aws_ecr_repository" "sns_back_web" {
-  name                 = "sns-back-web"
+resource "aws_ecr_repository" "web" {
+  name                 = var.ecr_repository_back_web
   image_tag_mutability = "MUTABLE"
   encryption_configuration {
     encryption_type = "AES256"

@@ -32,6 +32,7 @@ jobs:
       TF_VAR_ALB_DOMAIN: ${{secrets.ALB_DOMAIN}}
       TF_VAR_ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
       TF_VAR_ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
+      TF_VAR_ECS_TASK_ROLE: ${{secrets.ECS_TASK_ROLE}}
 
     permissions:
       id-token: write

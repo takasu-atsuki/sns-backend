@@ -11,3 +11,4 @@ variable "DEBUG" {}
 variable "ALB_DOMAIN" {}
 variable "ECR_REPOSITORY_BACK" {}
 variable "ECR_REPOSITORY_BACK_WEB" {}
+variable "ECS_TASK_ROLE" {}
