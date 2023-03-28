@@ -32,7 +32,7 @@ resource "aws_lb_listener" "this" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = var.alb_security_policy
-  certificate_arn   = "arn:aws:acm:ap-northeast-1:${data.aws_caller_identity.current.account_id}:certificate/aef90f51-e7ab-477d-aa62-609c315c0a00"
+  certificate_arn   = "arn:aws:acm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:certificate/${var.aws_ssl_id}"
 
   default_action {
     type             = "forward"
@@ -43,9 +43,8 @@ resource "aws_lb_listener" "this" {
 
 # ロードバランサーのセキュリティグループ
 resource "aws_security_group" "sns_service_alb_sg" {
-  name        = "sns_service_alb_sg"
-  description = "Security groups tied to application load balancers tied to services"
-  vpc_id      = var.vpc_id
+  name   = "sns_service_alb_sg"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port   = 443

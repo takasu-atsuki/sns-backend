@@ -1,4 +1,9 @@
 variable "private_subnet" {}
+variable "db_password" {}
+variable "db_user" {}
+variable "db_name" {}
+variable "db_port" {}
+
 variable "vpc_id" {
   type = string
 }
@@ -8,19 +13,9 @@ variable "rds_name" {
   default = "sns-rds"
 }
 
-variable "db_name" {
-  type = string
-}
-
-variable "db_user" {
-  type = string
-}
-
 variable "mysql_version" {
   type    = string
   default = "8.0.32"
 }
 
-variable "db_password" {
-  type = string
-}
+

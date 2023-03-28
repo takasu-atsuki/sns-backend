@@ -7,8 +7,8 @@ resource "aws_db_instance" "this" {
   engine                 = "mysql"
   engine_version         = var.mysql_version
   instance_class         = "db.t2.micro"
-  username               = var.db_user     //環境変数で定義する
-  password               = var.db_password // 環境変数で定義する
+  username               = var.db_user
+  password               = var.db_password
   max_allocated_storage  = 0
   multi_az               = false
   network_type           = "IPV4"
@@ -38,8 +38,8 @@ resource "aws_security_group" "rds_security_group" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = 3306
-    to_port     = 3306
+    from_port   = var.db_port
+    to_port     = var.db_port
     protocol    = "tcp"
     cidr_blocks = [data.aws_vpc.selected.cidr_block]
   }

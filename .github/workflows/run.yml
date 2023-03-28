@@ -26,10 +26,14 @@ jobs:
       TF_VAR_DB_PORT: ${{secrets.DB_PORT}}
       TF_VAR_FRONT_URI: ${{secrets.FRONTEND_PATH}}
       TF_VAR_ALLOWED_HOST: ${{secrets.ALLOWED_HOST}}
-      TF_VAR_AWS_ACCOUNT_ID: ${{secrets.ACTIONS_ROLE_NO}}
+      TR_VAR_AWS_REGION: ${{secrets.AWS_REGION}}
+      TR_VAR_AWS_SSL_ID: ${{secrets.AWS_SSL_ID}}
+      TF_VAR_AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
+      TF_VAR_AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       TF_VAR_AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
       TF_VAR_DEBUG: ${{secrets.APP_DEBUG}}
       TF_VAR_ALB_DOMAIN: ${{secrets.ALB_DOMAIN}}
+      TF_VAR_SECRET_KEY: ${{secrets.SECRET_KEY}}
       TF_VAR_ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
       TF_VAR_ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
       TF_VAR_ECS_TASK_ROLE: ${{secrets.ECS_TASK_ROLE}}
@@ -47,51 +51,6 @@ jobs:
         with:
           role-to-assume: ${{env.AWS_ROLE_ARN}}
           aws-region: ${{secrets.AWS_REGION}}
-
-      # AWSの環境構築(jobを分けた方がいいかも)
-      # Terraformのバージョン指定(下部でlatestでインストールしているがおいおいのため)
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{env.TF_VERSION}}
-
-      - name: Setup Terraform
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: '${{env.AWS_ROLE_ARN}}'
-          aws-region: '${{secrets.AWS_REGION}}'
-          role-duration-seconds: 900
-
-      # Terraformのフォーマット確認
-      - name: Terraform Format
-        run: |
-          cd terraform/environments/prod
-          terraform fmt -check -diff
-
-      # Terraformの初期化
-      - name: Terraform Init
-        run: |
-          cd terraform/environments/prod
-          terraform init
-
-      # Terraformのバリデーション
-      - name: Terraform Validate
-        run: |
-          cd terraform/environments/prod
-          terraform validate -no-color
-
-      # Terraformのplan確認
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
-
-      # TerraformでAWSの環境構築実装
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
 
       #　s3に最初に必要なfileをアップロード
       - name: s3 upload image
@@ -152,6 +111,51 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG
           echo "image_back_app=$ECR_REGISTRY_BACK/$ECR_REPOSITORY_BACK:$IMAGE_TAG"  >> $GITHUB_OUTPUT
           echo "image_back_web=$ECR_REGISTRY_BACK_WEB/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # AWSの環境構築(jobを分けた方がいいかも)
+      # Terraformのバージョン指定(下部でlatestでインストールしているがおいおいのため)
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{env.TF_VERSION}}
+
+      - name: Setup Terraform
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: '${{env.AWS_ROLE_ARN}}'
+          aws-region: '${{secrets.AWS_REGION}}'
+          role-duration-seconds: 900
+
+      # Terraformのフォーマット確認
+      - name: Terraform Format
+        run: |
+          cd terraform/environments/prod
+          terraform fmt -check -diff
+
+      # Terraformの初期化
+      - name: Terraform Init
+        run: |
+          cd terraform/environments/prod
+          terraform init
+
+      # Terraformのバリデーション
+      - name: Terraform Validate
+        run: |
+          cd terraform/environments/prod
+          terraform validate -no-color
+
+      # Terraformのplan確認
+      - name: Terraform Plan
+        # if: github.event_name == 'pull_request'
+        run: |
+          cd terraform/environments/prod
+          terraform plan -no-color
+
+      # TerraformでAWSの環境構築実装
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: |
+          cd terraform/environments/prod
+          terraform apply -auto-approve
 
       # Terraformで作った環境を初期化
       - name: Terraform Dest
