@@ -98,9 +98,9 @@ jobs:
 
       #　s3に最初に必要なfileをアップロード
       - name: s3 upload image
+        woring-directory: project/media
         env:
           S3_BACKET: ${{secrets.AWS_S3_BACKET_NAME}}
-        woring-directory: project/media
         run: |
           cd project
           aws s3 sync --delete --region $AWS_REGION . s3://$S3_BACKET/
