@@ -9,3 +9,5 @@ variable "AWS_ACCOUNT_ID" {}
 variable "AWS_S3_BACKET_NAME" {}
 variable "DEBUG" {}
 variable "ALB_DOMAIN" {}
+variable "ECR_REPOSITORY_BACK" {}
+variable "ECR_REPOSITORY_BACK_WEB" {}
