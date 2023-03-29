@@ -18,7 +18,7 @@ data "aws_caller_identity" "current" {}
 
 # タスク定義
 resource "aws_ecs_task_definition" "this" {
-  family                   = "sns-app"
+  family                   = "sns-app-hoge"
   execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
   task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
   cpu                      = ".25 vCPU"
