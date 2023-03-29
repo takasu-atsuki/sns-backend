@@ -1,4 +1,5 @@
 variable "private_subnet" {}
+variable "public_subnet" {}
 variable "ecs_task_role" {}
 variable "db_name" {}
 variable "db_host" {}
