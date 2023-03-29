@@ -142,19 +142,19 @@ jobs:
           cd terraform/environments/prod
           terraform validate -no-color
 
-      # # Terraformのplan確認
-      # - name: Terraform Plan
-      #   # if: github.event_name == 'pull_request'
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform plan -no-color
+      # Terraformのplan確認
+      - name: Terraform Plan
+        # if: github.event_name == 'pull_request'
+        run: |
+          cd terraform/environments/prod
+          terraform plan -no-color
 
-      # # TerraformでAWSの環境構築実装
-      # - name: Terraform Apply
-      #   if: github.event_name == 'push'
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform apply -auto-approve
+      # TerraformでAWSの環境構築実装
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: |
+          cd terraform/environments/prod
+          terraform apply -auto-approve
 
       # # RDBがプライベートサブネットに存在するため少し考える
       # - name: production mysql migration
@@ -173,8 +173,8 @@ jobs:
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py migrate
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py createsuperuser --username $SQL_USER --password $SQL_PASS
 
-      # Terraformで作った環境を初期化
-      - name: Terraform Dest
-        run: |
-          cd terraform/environments/prod
-          terraform destroy -auto-approve
+      # # Terraformで作った環境を初期化
+      # - name: Terraform Dest
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform destroy -auto-approve
