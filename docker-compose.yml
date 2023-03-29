@@ -5,7 +5,7 @@ services:
     container_name: python_django
     image: 137737054801.dkr.ecr.ap-northeast-1.amazonaws.com/sns-back-app:v1
     build: ./project/.
-    # env_file: ./backend/project/.env
+    env_file: ./project/.env
     volumes:
       - ./project:/usr/src/app/
     tty: true
