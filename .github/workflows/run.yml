@@ -52,6 +52,12 @@ jobs:
           role-to-assume: ${{env.AWS_ROLE_ARN}}
           aws-region: ${{secrets.AWS_REGION}}
 
+      #       # Terraformで作った環境を初期化
+      # - name: Terraform Dest
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform destroy -auto-approve
+
       #　s3に最初に必要なfileをアップロード
       - name: s3 upload image
         env:

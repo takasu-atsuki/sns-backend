@@ -49,9 +49,7 @@ resource "aws_ecs_task_definition" "this" {
         {
           name = "SECRET_KEY"
           valueFrom: var.secret_key
-        }
-      ]
-      secrets = [
+        },
         {
           name : "SQL_NAME"
           valueFrom : var.db_name
