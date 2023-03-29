@@ -38,6 +38,7 @@ module "lb" {
 
 module "ecs" {
   source                = "../../modules/ecs"
+  public_subnet         = module.vpc.public_subnet
   private_subnet        = module.vpc.private_subnet
   vpc_id                = module.vpc.vpc_id
   alb_target_group_arn  = module.lb.alb_target_group_arn

@@ -37,56 +37,56 @@ resource "aws_ecs_task_definition" "this" {
           appProtocol   = "http"
         }
       ]
-      # environment = [
-      #   {
-      #     name = "FRONT_URI"
-      #     valueFrom: var.front_url
-      #   },
-      #   {
-      #     name = "ALLOWED_HOSTS"
-      #     valueFrom: var.arrowed_host
-      #   },
-      #   {
-      #     name = "SECRET_KEY"
-      #     valueFrom: var.secret_key
-      #   },
-      #   {
-      #     name : "SQL_NAME"
-      #     valueFrom : var.db_name
-      #   },
-      #   {
-      #     name : "SQL_HOST"
-      #     valueFrom : var.db_host
-      #   },
-      #   {
-      #     name : "SQL_USER"
-      #     valueFrom : var.db_user
-      #   },
-      #   {
-      #     name : "SQL_PASSWORD"
-      #     valueFrom : var.db_pass
-      #   },
-      #   {
-      #     name : "SQL_PORT"
-      #     valueFrom : var.db_port
-      #   },
-      #   {
-      #     name : "AWS_ACCESS_KEYID"
-      #     valueFrom : var.aws_access_key_id
-      #   },
-      #   {
-      #     name : "AWS_SECRET_ACCESS_KEY"
-      #     valueFrom : var.aws_secret_access_key
-      #   },
-      #   {
-      #     name : "AWS_S3_BACKET_NAME"
-      #     valueFrom : var.aws_s3_backet_name
-      #   },
-      #   {
-      #     name : "DEBUG"
-      #     valueFrom : var.debug
-      #   },
-      # ]
+      environment = [
+        {
+          name = "FRONT_URI"
+          valueFrom: var.front_url
+        },
+        {
+          name = "ALLOWED_HOSTS"
+          valueFrom: var.arrowed_host
+        },
+        {
+          name = "SECRET_KEY"
+          valueFrom: var.secret_key
+        },
+        {
+          name : "SQL_NAME"
+          valueFrom : var.db_name
+        },
+        {
+          name : "SQL_HOST"
+          valueFrom : var.db_host
+        },
+        {
+          name : "SQL_USER"
+          valueFrom : var.db_user
+        },
+        {
+          name : "SQL_PASSWORD"
+          valueFrom : var.db_pass
+        },
+        {
+          name : "SQL_PORT"
+          valueFrom : var.db_port
+        },
+        {
+          name : "AWS_ACCESS_KEYID"
+          valueFrom : var.aws_access_key_id
+        },
+        {
+          name : "AWS_SECRET_ACCESS_KEY"
+          valueFrom : var.aws_secret_access_key
+        },
+        {
+          name : "AWS_S3_BACKET_NAME"
+          valueFrom : var.aws_s3_backet_name
+        },
+        {
+          name : "DEBUG"
+          valueFrom : var.debug
+        },
+      ]
     },
     {
       name      = var.web_name
@@ -127,7 +127,7 @@ resource "aws_ecs_service" "this" {
   }
 
   network_configuration {
-    subnets          = [for subnet in var.private_subnet : subnet.id]
+    subnets          = [for subnet in var.public_subnet : subnet.id]
     security_groups  = [aws_security_group.sns_back_sg.id]
     assign_public_ip = true
   }
@@ -153,6 +153,13 @@ resource "aws_security_group" "sns_back_sg" {
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = [data.aws_vpc.selected.cidr_block]
+  }
+
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
