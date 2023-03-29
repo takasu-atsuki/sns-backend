@@ -26,8 +26,8 @@ jobs:
       TF_VAR_DB_PORT: ${{secrets.DB_PORT}}
       TF_VAR_FRONT_URI: ${{secrets.FRONTEND_PATH}}
       TF_VAR_ALLOWED_HOST: ${{secrets.ALLOWED_HOST}}
-      TR_VAR_AWS_REGION: ${{secrets.AWS_REGION}}
-      TR_VAR_AWS_SSL_ID: ${{secrets.AWS_SSL_ID}}
+      TF_VAR_AWS_REGION: ${{secrets.AWS_REGION}}
+      TF_VAR_AWS_SSL_ID: ${{secrets.AWS_SSL_ID}}
       TF_VAR_AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
       TF_VAR_AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       TF_VAR_AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
@@ -121,8 +121,8 @@ jobs:
       - name: Setup Terraform
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: '${{env.AWS_ROLE_ARN}}'
-          aws-region: '${{secrets.AWS_REGION}}'
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          aws-region: ${{secrets.AWS_REGION}}
           role-duration-seconds: 900
 
       # Terraformのフォーマット確認
