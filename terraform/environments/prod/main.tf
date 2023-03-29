@@ -15,7 +15,7 @@ module "rds" {
   source         = "../../modules/rds"
   vpc_id         = module.vpc.vpc_id
   private_subnet = module.vpc.private_subnet
-  public_subnet = module.vpc.public_subnet
+  public_subnet  = module.vpc.public_subnet
   db_name        = var.DB_NAME
   db_user        = var.DB_USER
   db_password    = var.DB_PASS
