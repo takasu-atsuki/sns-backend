@@ -37,56 +37,6 @@ resource "aws_ecs_task_definition" "this" {
           appProtocol   = "http"
         }
       ]
-      environment = [
-        {
-          name = "FRONT_URI"
-          valueFrom: var.front_url
-        },
-        {
-          name = "ALLOWED_HOSTS"
-          valueFrom: var.arrowed_host
-        },
-        {
-          name = "SECRET_KEY"
-          valueFrom: var.secret_key
-        },
-        {
-          name : "SQL_NAME"
-          valueFrom : var.db_name
-        },
-        {
-          name : "SQL_HOST"
-          valueFrom : var.db_host
-        },
-        {
-          name : "SQL_USER"
-          valueFrom : var.db_user
-        },
-        {
-          name : "SQL_PASSWORD"
-          valueFrom : var.db_pass
-        },
-        {
-          name : "SQL_PORT"
-          valueFrom : var.db_port
-        },
-        {
-          name : "AWS_ACCESS_KEYID"
-          valueFrom : var.aws_access_key_id
-        },
-        {
-          name : "AWS_SECRET_ACCESS_KEY"
-          valueFrom : var.aws_secret_access_key
-        },
-        {
-          name : "AWS_S3_BACKET_NAME"
-          valueFrom : var.aws_s3_backet_name
-        },
-        {
-          name : "DEBUG"
-          valueFrom : var.debug
-        },
-      ]
     },
     {
       name      = var.web_name
@@ -106,7 +56,6 @@ resource "aws_ecs_task_definition" "this" {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
   }
-  # task_definition = data.aws_ecs_task_definition.new.arn
 }
 
 # サービス
