@@ -102,7 +102,6 @@ jobs:
       #     ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
       #     IMAGE_TAG: latest
       #   run: |
-      #     docker-compose down -v
       #     cd project
       #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG .
       #     docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG
