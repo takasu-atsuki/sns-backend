@@ -37,6 +37,20 @@ resource "aws_ecs_task_definition" "this" {
           appProtocol   = "http"
         }
       ]
+      environment = [
+        {
+          name = "FRONT_URI"
+          valueFrom: var.front_url
+        },
+        {
+          name = "ALLOWED_HOSTS"
+          valueFrom: var.arrowed_host
+        },
+        {
+          name = "SECRET_KEY"
+          valueFrom: var.secret_key
+        }
+      ]
       secrets = [
         {
           name : "SQL_NAME"
@@ -59,14 +73,6 @@ resource "aws_ecs_task_definition" "this" {
           valueFrom : var.db_port
         },
         {
-          name : "FRONT_URI"
-          valueFrom : var.front_url
-        },
-        {
-          name : "ALLOWED_HOSTS"
-          valueFrom : var.arrowed_host
-        },
-        {
           name : "AWS_ACCESS_KEYID"
           valueFrom : var.aws_access_key_id
         },
@@ -82,10 +88,6 @@ resource "aws_ecs_task_definition" "this" {
           name : "DEBUG"
           valueFrom : var.debug
         },
-        {
-          name : "SECRET_KEY"
-          valueFrom : var.secret_key
-        }
       ]
     },
     {
