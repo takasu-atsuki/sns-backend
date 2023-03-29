@@ -60,7 +60,7 @@ jobs:
           cd project/media
           aws s3 sync --delete --region $AWS_REGION . s3://$S3_BACKET/
 
-      　docker-compose で テスト
+      # docker-compose で テスト
       - name: docker-compose run
         run: |
           docker-compose up --build -d
