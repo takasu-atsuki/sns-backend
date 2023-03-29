@@ -1,4 +1,5 @@
 variable "private_subnet" {}
+variable "public_subnet" {}
 variable "db_password" {}
 variable "db_user" {}
 variable "db_name" {}

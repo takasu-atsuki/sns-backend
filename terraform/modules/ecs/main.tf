@@ -127,6 +127,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = [for subnet in var.public_subnet : subnet.id]
+    subnets          = [for subnet in var.private_subnet : subnet.id]
     security_groups  = [aws_security_group.sns_back_sg.id]
     assign_public_ip = true
   }

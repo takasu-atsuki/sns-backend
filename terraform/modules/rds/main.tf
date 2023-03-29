@@ -21,7 +21,8 @@ resource "aws_db_instance" "this" {
 resource "aws_db_subnet_group" "this" {
 
   name       = "sns-rds-subnet-groups"
-  subnet_ids = [for subnet in var.private_subnet : subnet.id]
+  # subnet_ids = [for subnet in var.private_subnet : subnet.id]
+  subnet_ids = [for subnet in var.public_subnet : subnet.id]
 
   tags = {
     Name = "sns_private_rdb_subnet_group"
