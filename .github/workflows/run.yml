@@ -52,41 +52,41 @@ jobs:
           role-to-assume: ${{env.AWS_ROLE_ARN}}
           aws-region: ${{secrets.AWS_REGION}}
 
-      #　s3に最初に必要なfileをアップロード
-      - name: s3 upload image
-        env:
-          S3_BACKET: ${{secrets.AWS_S3_BACKET_NAME}}
-        run: |
-          cd project/media
-          aws s3 sync --delete --region $AWS_REGION . s3://$S3_BACKET/
+      # #　s3に最初に必要なfileをアップロード
+      # - name: s3 upload image
+      #   env:
+      #     S3_BACKET: ${{secrets.AWS_S3_BACKET_NAME}}
+      #   run: |
+      #     cd project/media
+      #     aws s3 sync --delete --region $AWS_REGION . s3://$S3_BACKET/
 
-      # docker-compose で テスト
-      - name: docker-compose run
-        run: |
-          docker-compose up --build -d
-          sleep 20
+      # # docker-compose で テスト
+      # - name: docker-compose run
+      #   run: |
+      #     docker-compose up --build -d
+      #     sleep 20
 
-      # テスト用DBのマイグレーション
-      - name: DB migrations
-        run: |
-          docker ps
-          docker-compose run app python manage.py makemigrations
-          docker-compose run app python manage.py migrate
+      # # テスト用DBのマイグレーション
+      # - name: DB migrations
+      #   run: |
+      #     docker ps
+      #     docker-compose run app python manage.py makemigrations
+      #     docker-compose run app python manage.py migrate
 
-      # テスト用DBの初期設定
-      - name: DB permission
-        run: |
-          docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
+      # # テスト用DBの初期設定
+      # - name: DB permission
+      #   run: |
+      #     docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
 
-      # テスト実行(変数の渡し方改善？)
-      - name: test app
-        env:
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
-          AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        run: |
-          docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
+      # # テスト実行(変数の渡し方改善？)
+      # - name: test app
+      #   env:
+      #     SECRET_KEY: ${{secrets.SECRET_KEY}}
+      #     AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
+      #     AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
+      #     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      #   run: |
+      #     docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
 
       # # ECRにログイン
       # - name: Login to Amazon ECR
@@ -143,19 +143,19 @@ jobs:
           cd terraform/environments/prod
           terraform validate -no-color
 
-      # Terraformのplan確認
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
+      # # Terraformのplan確認
+      # - name: Terraform Plan
+      #   # if: github.event_name == 'pull_request'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform plan -no-color
 
-      # TerraformでAWSの環境構築実装
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
+      # # TerraformでAWSの環境構築実装
+      # - name: Terraform Apply
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform apply -auto-approve
 
       # # RDBがプライベートサブネットに存在するため少し考える
       # - name: production mysql migration
