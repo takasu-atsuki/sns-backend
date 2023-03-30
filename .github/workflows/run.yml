@@ -43,29 +43,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: docker-compose run
-        run: |
-          docker-compose up --build -d
-          sleep 20
-      - name: DB migrations
-        run: |
-          docker ps 
-          docker-compose run app python manage.py makemigrations
-          docker-compose run app python manage.py migrate
-      - name: DB permission
-        run: |
-          docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
-      - name: test app
-        env:
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
-          AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        run: |
-          docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{env.TF_VERSION}}
+      # - name: docker-compose run
+      #   run: |
+      #     docker-compose up --build -d
+      #     sleep 20
+      # - name: DB migrations
+      #   run: |
+      #     docker ps
+      #     docker-compose run app python manage.py makemigrations
+      #     docker-compose run app python manage.py migrate
+      # - name: DB permission
+      #   run: |
+      #     docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
+      # - name: test app
+      #   env:
+      #     SECRET_KEY: ${{secrets.SECRET_KEY}}
+      #     AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
+      #     AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
+      #     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      #   run: |
+      #     docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
+      # - uses: hashicorp/setup-terraform@v2
+      #   with:
+      #     terraform_version: ${{env.TF_VERSION}}
 
       - name: Configure AWS credentials from IAM Role
         uses: aws-actions/configure-aws-credentials@v1
@@ -95,23 +95,23 @@ jobs:
         run: |
           cd terraform/environments/prod
           terraform validate -no-color
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
-        # On push to main, build or change infrastructure according to Terraform configuration files
-        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
-      # - name: Terraform Dest
+      # # Generates an execution plan for Terraform
+      # - name: Terraform Plan
+      #   # if: github.event_name == 'pull_request'
       #   run: |
       #     cd terraform/environments/prod
-      #     terraform destroy -auto-approve
+      #     terraform plan -no-color
+      #   # On push to main, build or change infrastructure according to Terraform configuration files
+      #   # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      # - name: Terraform Apply
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform apply -auto-approve
+      - name: Terraform Dest
+        run: |
+          cd terraform/environments/prod
+          terraform destroy -auto-approve
 
 # name: sns-ecs-backend-test-deploy
 

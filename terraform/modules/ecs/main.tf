@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = var.app_name #var.app_name
-      image     = "hoge"       #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
+      image     = "hoge"   #"${data.aws_ecr_repository.service_image_back_app.repository_url}:latest"
       essential = true
       portMappings = [
         {
@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "this" {
     },
     {
       name      = var.web    #var.web
-      image     = "hogehoge" #"${data.aws_ecr_repository.service_image_back_web.repository_url}:latest"
+      image     = "hogehoge"        #"${data.aws_ecr_repository.service_image_back_web.repository_url}:latest"
       essential = true
       portMappings = [
         {
