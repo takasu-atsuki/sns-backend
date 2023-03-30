@@ -88,73 +88,73 @@ jobs:
         run: |
           docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
 
-      # # ECRにログイン
-      # - name: Login to Amazon ECR
-      #   id: login-ecr
-      #   uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
+      # ECRにログイン
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
 
-      # # ECRにdocker push
-      # - name: Build, tag, and push image to Amazon ECR
-      #   id: build-image
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
-      #     ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
-      #     IMAGE_TAG: latest
-      #   run: |
-      #     cd project
-      #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG .
-      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG
-      #     cd ../nginx
-      #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG .
-      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG
-      #     echo "image_back_app=$ECR_REGISTRY_BACK/$ECR_REPOSITORY_BACK:$IMAGE_TAG"  >> $GITHUB_OUTPUT
-      #     echo "image_back_web=$ECR_REGISTRY_BACK_WEB/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      # ECRにdocker push
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY_BACK: ${{secrets.ECR_REPOSITORY_BACK}}
+          ECR_REPOSITORY_BACK_WEB: ${{secrets.ECR_REPOSITORY_BACK_WEB}}
+          IMAGE_TAG: latest
+        run: |
+          cd project
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK:$IMAGE_TAG
+          cd ../nginx
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG
+          echo "image_back_app=$ECR_REGISTRY_BACK/$ECR_REPOSITORY_BACK:$IMAGE_TAG"  >> $GITHUB_OUTPUT
+          echo "image_back_web=$ECR_REGISTRY_BACK_WEB/$ECR_REPOSITORY_BACK_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # AWSの環境構築(jobを分けた方がいいかも)
-      # Terraformのバージョン指定(下部でlatestでインストールしているがおいおいのため)
-      # - uses: hashicorp/setup-terraform@v2
-      #   with:
-      #     terraform_version: ${{env.TF_VERSION}}
+      AWSの環境構築(jobを分けた方がいいかも)
+      Terraformのバージョン指定(下部でlatestでインストールしているがおいおいのため)
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{env.TF_VERSION}}
 
-      # - name: Setup Terraform
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     role-to-assume: ${{env.AWS_ROLE_ARN}}
-      #     aws-region: ${{secrets.AWS_REGION}}
-      #     role-duration-seconds: 900
+      - name: Setup Terraform
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          aws-region: ${{secrets.AWS_REGION}}
+          role-duration-seconds: 900
 
-      # # Terraformのフォーマット確認
-      # - name: Terraform Format
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform fmt -check -diff
+      # Terraformのフォーマット確認
+      - name: Terraform Format
+        run: |
+          cd terraform/environments/prod
+          terraform fmt -check -diff
 
-      # # Terraformの初期化
-      # - name: Terraform Init
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform init
+      # Terraformの初期化
+      - name: Terraform Init
+        run: |
+          cd terraform/environments/prod
+          terraform init
 
-      # # Terraformのバリデーション
-      # - name: Terraform Validate
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform validate -no-color
+      # Terraformのバリデーション
+      - name: Terraform Validate
+        run: |
+          cd terraform/environments/prod
+          terraform validate -no-color
 
-      # # Terraformのplan確認
-      # - name: Terraform Plan
-      #   # if: github.event_name == 'pull_request'
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform plan -no-color
+      # Terraformのplan確認
+      - name: Terraform Plan
+        # if: github.event_name == 'pull_request'
+        run: |
+          cd terraform/environments/prod
+          terraform plan -no-color
 
-      # # TerraformでAWSの環境構築実装
-      # - name: Terraform Apply
-      #   if: github.event_name == 'push'
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform apply -auto-approve
+      # TerraformでAWSの環境構築実装
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: |
+          cd terraform/environments/prod
+          terraform apply -auto-approve
 
       # - name: DB migrate
       #   env:
