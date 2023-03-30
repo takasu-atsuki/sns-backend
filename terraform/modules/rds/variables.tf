@@ -1,9 +1,9 @@
 variable "private_subnet" {}
-variable "public_subnet" {}
+# variable "public_subnet" {}
 variable "db_password" {}
 variable "db_user" {}
 variable "db_name" {}
-variable "db_port" {}
+# variable "db_port" {}
 
 variable "vpc_id" {
   type = string
