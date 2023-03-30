@@ -18,7 +18,7 @@ data "aws_caller_identity" "current" {}
 
 # タスク定義
 resource "aws_ecs_task_definition" "this" {
-  family                   = "sns-app-hoge"
+  family                   = "sns-app"
   execution_role_arn       = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
   task_role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.ecs_task_role}"
   cpu                      = ".25 vCPU"
@@ -56,35 +56,35 @@ resource "aws_ecs_task_definition" "this" {
         },
         {
           name = "SQL_HOST"
-          valueFrom = var.db_host
+          value = var.db_host
         },
         {
           name = "SQL_USER"
-          valueFrom = var.db_user
+          value = var.db_user
         },
         {
           name = "SQL_PASSWORD"
-          valueFrom = var.db_pass
+          value = var.db_pass
         },
         {
           name = "SQL_PORT"
-          valueFrom = var.db_port
+          value = var.db_port
         },
         {
           name = "AWS_ACCESS_KEYID"
-          valueFrom = var.aws_access_key_id
+          value = var.aws_access_key_id
         },
         {
           name = "AWS_SECRET_ACCESS_KEY"
-          valueFrom = var.aws_secret_access_key
+          value = var.aws_secret_access_key
         },
         {
           name = "AWS_S3_BACKET_NAME"
-          valueFrom = var.aws_s3_backet_name
+          value = var.aws_s3_backet_name
         },
         {
           name = "DEBUG"
-          valueFrom = var.debug
+          value = var.debug
         },
       ]
     },
