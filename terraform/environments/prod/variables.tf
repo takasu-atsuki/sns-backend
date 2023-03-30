@@ -1,17 +1,3 @@
-
-
-# variable "DB_NAME" {}
-# variable "DB_HOST" {}
-# variable "DB_USER" {}
-# variable "DB_PASS" {}
-# variable "DB_PORT" {}
-# variable "FRONT_URI" {}
-# variable "ALLOWED_HOST" {}
-# variable "AWS_ACCOUNT_ID" {}
-# variable "AWS_S3_BACKET_NAME" {}
-# variable "DEBUG" {}
-# variable "ALB_DOMAIN" {}
-
 variable "DB_NAME" {}
 variable "DB_HOST" {}
 variable "DB_USER" {}

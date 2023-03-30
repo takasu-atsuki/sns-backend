@@ -1,118 +1,3 @@
-# name: sns-ecs-backend-test-deploy
-
-# on:
-#   push:
-#     branches: [master]
-#   pull_request:
-#     branches: [master]
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       max-parallel: 4
-#       matrix:
-#         python-version: [3.9]
-
-#     env:
-#       ECR_REPOSITORY_BACK: sns-back-app
-#       ECR_REPOSITORY_BACK_WEB: sns-back-web
-#       ECS_SERVICE: sns-task-service
-#       ECS_CLUSTER: sns
-#       CONTAINER_NAME1: sns_back_app
-#       CONTAINER_NAME2: sns_back_web
-#       AWS_ROLE_ARN: arn:aws:iam::${{secrets.ACTIONS_ROLE}}
-
-#       TF_VERSION: '1.4.2'
-#       TF_VAR_APP_SECRET_KEY: ${{secrets.SECRET_KEY}}
-#       TF_VAR_DB_NAME: ${{secrets.DB_NAME}}
-#       TF_VAR_DB_HOST: ${{secrets.DB_HOST}}
-#       TF_VAR_DB_USER: ${{secrets.DB_USER}}
-#       TF_VAR_DB_PASS: ${{secrets.DB_PASS}}
-#       TF_VAR_DB_PORT: ${{secrets.DB_PORT}}
-#       TF_VAR_FRONT_URI: ${{secrets.FRONTEND_PATH}}
-#       TF_VAR_ALLOWED_HOST: ${{secrets.ALLOWED_HOST}}
-#       TF_VAR_AWS_ACCOUNT_ID: ${{secrets.ACTIONS_ROLE_NO}}
-#       TF_VAR_AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
-#       TF_VAR_DEBUG: ${{secrets.APP_DEBUG}}
-#       TF_VAR_ALB_DOMAIN: ${{secrets.ALB_DOMAIN}}
-
-#     permissions:
-#       id-token: write
-#       contents: read
-
-#     steps:
-#       - uses: actions/checkout@v3
-#       # - name: docker-compose run
-#       #   run: |
-#       #     docker-compose up --build -d
-#       #     sleep 20
-#       # - name: DB migrations
-#       #   run: |
-#       #     docker ps
-#       #     docker-compose run app python manage.py makemigrations
-#       #     docker-compose run app python manage.py migrate
-#       # - name: DB permission
-#       #   run: |
-#       #     docker exec sns_mysql mysql -uroot -proot -e"GRANT ALL PRIVILEGES ON test_sns.* TO 'user'@'%'"
-#       # - name: test app
-#       #   env:
-#       #     SECRET_KEY: ${{secrets.SECRET_KEY}}
-#       #     AWS_ACCESS_KEYID: ${{secrets.AWS_ACCESS_KEYID}}
-#       #     AWS_S3_BACKET_NAME: ${{secrets.AWS_S3_BACKET_NAME}}
-#       #     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-#       #   run: |
-#       #     docker exec -e SECRET_KEY=$SECRET_KEY -e AWS_ACCESS_KEYID=$AWS_ACCESS_KEYID -e AWS_S3_BACKET_NAME=$AWS_S3_BACKET_NAME -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY python_django python manage.py test
-#       # - uses: hashicorp/setup-terraform@v2
-#       #   with:
-#       #     terraform_version: ${{env.TF_VERSION}}
-
-#       - name: Configure AWS credentials from IAM Role
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           role-to-assume: ${{env.AWS_ROLE_ARN}}
-#           aws-region: ${{secrets.AWS_REGION}}
-
-#       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-#       - name: Setup Terraform
-#         uses: aws-actions/configure-aws-credentials@v2
-#         with:
-#           role-to-assume: '${{env.AWS_ROLE_ARN}}'
-#           aws-region: '${{secrets.AWS_REGION}}'
-#           role-duration-seconds: 900
-
-#       # Checks that all Terraform configuration files adhere to a canonical format
-#       - name: Terraform Format
-#         run: |
-#           cd terraform/environments/prod
-#           terraform fmt -check -diff
-#       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-#       - name: Terraform Init
-#         run: |
-#           cd terraform/environments/prod
-#           terraform init
-#       - name: Terraform Validate
-#         run: |
-#           cd terraform/environments/prod
-#           terraform validate -no-color
-#       # # Generates an execution plan for Terraform
-#       # - name: Terraform Plan
-#       #   # if: github.event_name == 'pull_request'
-#       #   run: |
-#       #     cd terraform/environments/prod
-#       #     terraform plan -no-color
-#       #   # On push to main, build or change infrastructure according to Terraform configuration files
-#       #   # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-#       # - name: Terraform Apply
-#       #   if: github.event_name == 'push'
-#       #   run: |
-#       #     cd terraform/environments/prod
-#       #     terraform apply -auto-approve
-#       - name: Terraform Dest
-#         run: |
-#           cd terraform/environments/prod
-#           terraform destroy -auto-approve
-
 name: sns-ecs-backend-test-deploy
 
 on:
@@ -257,19 +142,19 @@ jobs:
           cd terraform/environments/prod
           terraform validate -no-color
 
-      # Terraformのplan確認
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
+      # # Terraformのplan確認
+      # - name: Terraform Plan
+      #   # if: github.event_name == 'pull_request'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform plan -no-color
 
-      # TerraformでAWSの環境構築実装
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
+      # # TerraformでAWSの環境構築実装
+      # - name: Terraform Apply
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform apply -auto-approve
 
       # # RDBがプライベートサブネットに存在するため少し考える
       # - name: production mysql migration
@@ -288,8 +173,8 @@ jobs:
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py migrate
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py createsuperuser --username $SQL_USER --password $SQL_PASS
 
-      # # Terraformで作った環境を初期化
-      # - name: Terraform Dest
-      #   run: |
-      #     cd terraform/environments/prod
-      #     terraform destroy -auto-approve
+      # Terraformで作った環境を初期化
+      - name: Terraform Dest
+        run: |
+          cd terraform/environments/prod
+          terraform destroy -auto-approve
