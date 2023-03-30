@@ -76,8 +76,7 @@ resource "aws_security_group" "rds_security_group" {
 # resource "aws_db_subnet_group" "this" {
 
 #   name       = "sns-rds-subnet-groups"
-#   # subnet_ids = [for subnet in var.private_subnet : subnet.id]
-#   subnet_ids = [for subnet in var.public_subnet : subnet.id]
+#   subnet_ids = [for subnet in var.private_subnet : subnet.id]
 
 #   tags = {
 #     Name = "sns_private_rdb_subnet_group"
@@ -97,8 +96,7 @@ resource "aws_security_group" "rds_security_group" {
 #     from_port   = var.db_port
 #     to_port     = var.db_port
 #     protocol    = "tcp"
-#     # cidr_blocks = [data.aws_vpc.selected.cidr_block]
-#     cidr_blocks = ["0.0.0.0/0"]
+#     cidr_blocks = [data.aws_vpc.selected.cidr_block]
 #   }
 
 #   egress {

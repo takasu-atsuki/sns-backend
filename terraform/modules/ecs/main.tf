@@ -242,8 +242,7 @@ resource "aws_security_group" "sns_back_sg" {
 #   }
 
 #   network_configuration {
-#     subnets          = [for subnet in var.public_subnet : subnet.id]
-#     # subnets          = [for subnet in var.private_subnet : subnet.id]
+#     subnets          = [for subnet in var.private_subnet : subnet.id]
 #     security_groups  = [aws_security_group.sns_back_sg.id]
 #     assign_public_ip = true
 #   }
@@ -269,13 +268,6 @@ resource "aws_security_group" "sns_back_sg" {
 #     to_port     = 8080
 #     protocol    = "tcp"
 #     cidr_blocks = [data.aws_vpc.selected.cidr_block]
-#   }
-
-#   ingress {
-#     from_port   = 8080
-#     to_port     = 8080
-#     protocol    = "tcp"
-#     cidr_blocks = ["0.0.0.0/0"]
 #   }
 
 #   egress {
