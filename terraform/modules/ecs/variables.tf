@@ -1,4 +1,23 @@
 variable "private_subnet" {}
+variable "vpc_id" {
+  type = string
+}
+variable "alb_target_group_arn" {
+  type = string
+}
+
+variable "app_name" {
+  type    = string
+  default = "sns-back-app"
+}
+
+variable "web" {
+  type    = string
+  default = "sns-back-web"
+}
+
+
+# variable "private_subnet" {}
 # variable "public_subnet" {}
 # variable "ecs_task_role" {}
 # variable "db_name" {}
@@ -20,9 +39,9 @@ variable "private_subnet" {}
 # variable "web_name" {
 #   type = string
 # }
-variable "vpc_id" {
-  type = string
-}
-variable "alb_target_group_arn" {
-  type = string
-}
+# variable "vpc_id" {
+#   type = string
+# }
+# variable "alb_target_group_arn" {
+#   type = string
+# }
