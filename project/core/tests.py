@@ -391,7 +391,7 @@ class DiaryTest(TestCase):
         diary = Diary.objects.get(id=res.data[0]['id'])
         
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(diary.user_id, user)
+        self.assertEqual(diary.userId, user)
         self.assertEqual(diary.message, 'test2')
         
     def test_get_diary(self):
@@ -509,8 +509,8 @@ class GroupInTest(TestCase):
         groupIn = GroupIn.objects.get(id=res.data['id'])
         
         self.assertEqual(res.status_code, 201)
-        self.assertEqual(groupIn.show_user, user3)
-        self.assertEqual(groupIn.target_group, group)
+        self.assertEqual(groupIn.showUser, user3)
+        self.assertEqual(groupIn.targetGroup, group)
         self.assertEqual(groupIn.approved, False)
         
         # 重複してないか確認
@@ -584,8 +584,8 @@ class DMailTest(TestCase):
         dmail = DMail.objects.get(id=res.data['id'])
         
         self.assertEqual(res.status_code, 201)
-        self.assertEqual(dmail.send_user, user)
-        self.assertEqual(dmail.get_user, user2)
+        self.assertEqual(dmail.sendUser, user)
+        self.assertEqual(dmail.getUser, user2)
         self.assertEqual(dmail.message, payload['message'])
         
     def test_patch_dmail(self):
