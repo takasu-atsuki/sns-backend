@@ -1,5 +1,5 @@
-# variable "aws_region" {}
-# variable "aws_ssl_id" {}
+variable "aws_region" {}
+variable "aws_ssl_id" {}
 variable "public_subnet" {}
 
 variable "vpc_id" {

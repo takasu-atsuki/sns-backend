@@ -1,29 +1,29 @@
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
-    }
-  }
-}
-
-# Configure the AWS Provider
-provider "aws" {
-  region = "ap-northeast-1"
-}
-
-
 # terraform {
 #   required_providers {
 #     aws = {
 #       source  = "hashicorp/aws"
-#       version = "4.60.0"
+#       version = "~> 4.0"
 #     }
 #   }
 # }
 
 # # Configure the AWS Provider
 # provider "aws" {
-#   region = var.AWS_REGION
+#   region = "ap-northeast-1"
 # }
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.60.0"
+    }
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = var.AWS_REGION
+}
