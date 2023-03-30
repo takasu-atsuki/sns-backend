@@ -4,13 +4,13 @@ resource "aws_ecs_cluster" "this" {
 }
 
 # ECRのレジストリの取得
-# data "aws_ecr_repository" "service_image_back_app" {
-#   name = var.app_name
-# }
+data "aws_ecr_repository" "service_image_back_app" {
+  name = var.app_name
+}
 
-# data "aws_ecr_repository" "service_image_back_web" {
-#   name = var.web
-# }
+data "aws_ecr_repository" "service_image_back_web" {
+  name = var.web
+}
 
 data "aws_caller_identity" "current" {}
 
