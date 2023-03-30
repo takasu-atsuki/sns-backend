@@ -156,14 +156,14 @@ jobs:
       #     cd terraform/environments/prod
       #     terraform apply -auto-approve
 
-      - name: DB migrate
-        env:
-          ECS_CLUSTER_NAME: ${{secrets.ECS_CLUSTER_NAME}}
-          ECS_TASK_NAME: ${{secrets.ECS_TASK_NAME}}
-          ECS_CONTAINER_APP_NAME: ${{secrets.ECS_CONTAINER_APP_NAME}}
-        run: |
-          aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py makemigrations"
-          aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py migrate"
+      # - name: DB migrate
+      #   env:
+      #     ECS_CLUSTER_NAME: ${{secrets.ECS_CLUSTER_NAME}}
+      #     ECS_TASK_NAME: ${{secrets.ECS_TASK_NAME}}
+      #     ECS_CONTAINER_APP_NAME: ${{secrets.ECS_CONTAINER_APP_NAME}}
+      #   run: |
+      #     aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py makemigrations"
+      #     aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py migrate"
 
       # # RDBがプライベートサブネットに存在するため少し考える
       # - name: production mysql migration
