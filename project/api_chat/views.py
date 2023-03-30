@@ -53,8 +53,8 @@ class DMailViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, custompermissions.DMailPermissions)
 
     def get_queryset(self):
-        return self.queryset.filter(Q(send_user=self.request.user) | Q(get_user=self.request.user))
+        return self.queryset.filter(Q(sendUser=self.request.user) | Q(getUser=self.request.user))
 
     def perform_create(self, serializer):
-        serializer.save(send_user=self.request.user)
+        serializer.save(sendUser=self.request.user)
 

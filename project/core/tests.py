@@ -46,8 +46,8 @@ class ProfileTest(TestCase):
         user = User.objects.create(username='test1', password=PASSWORD)
         user2 = User.objects.create(username='test2', password=PASSWORD)
         user3 = User.objects.create(username='test3', password=PASSWORD)
-        Profile.objects.create(userPro=user, nickName='test1', created_at=time, updated_at=time, image='test')
-        Profile.objects.create(userPro=user2, nickName='test2', created_at=time, updated_at=time, image='test')
+        Profile.objects.create(userPro=user, nickName='test1', createdAt=time, updatedAt=time, image='test')
+        Profile.objects.create(userPro=user2, nickName='test2', createdAt=time, updatedAt=time, image='test')
         
     def test_get_myprof(self):
         self.client = APIClient()
@@ -82,8 +82,8 @@ class ProfileTest(TestCase):
         
         payload = {
             'nickName': 'hoge',
-            'created_at': time,
-            'updated_at': time,
+            'createdAt': time,
+            'updatedAt': time,
             'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/image/noimage.png', 'rb'),
         }
         
@@ -203,9 +203,9 @@ class GroupTest(TestCase):
         user2 = User.objects.create(username='test2', password=PASSWORD)
         user3 = User.objects.create(username='test3', password=PASSWORD)
         group1 = Group.objects.create(title='test_group', openGrouper=user1,
-                                      created_at=time, updated_at=time)
+                                      createdAt=time, updatedAt=time)
         group2 = Group.objects.create(title='test_group2', openGrouper=user2,
-                                      created_at=time, updated_at=time)
+                                      createdAt=time, updatedAt=time)
 
         group1.inUser.add(user2)
         group1.save()
@@ -289,9 +289,9 @@ class ChatTest(TestCase):
     def setUpTestData(cls):
         user = User.objects.create(username='test1', password=PASSWORD)
         user2 = User.objects.create(username='test2', password=PASSWORD)
-        group = Group.objects.create(title='test_group', openGrouper=user, created_at=time, updated_at=time)
+        group = Group.objects.create(title='test_group', openGrouper=user, createdAt=time, updatedAt=time)
         group.inUser.add(user2)
-        Chat.objects.create(sender=user, group=group, message='test', created_at=time, updated_at=time)
+        Chat.objects.create(sender=user, group=group, message='test', createdAt=time, updatedAt=time)
 
     def test_get_chat(self):
         self.client = APIClient()
@@ -370,10 +370,10 @@ class DiaryTest(TestCase):
     def setUpTestData(cls):
         user1 = User.objects.create(username='test1', password=PASSWORD)
         user2 = User.objects.create(username='test2', password=PASSWORD)
-        diary = Diary.objects.create(user_id=user1, message='test2', created_at=time, updated_at=time)
+        diary = Diary.objects.create(userId=user1, message='test2', createdAt=time, updatedAt=time)
         diary.liked.add(user2)
         diary.save()
-        diary2 = Diary.objects.create(user_id=user2, message='test3', created_at=time, updated_at=time)
+        diary2 = Diary.objects.create(userId=user2, message='test3', createdAt=time, updatedAt=time)
         diary2.liked.add(user1)
         diary2.save()
         
@@ -465,14 +465,14 @@ class GroupInTest(TestCase):
         user1 = User.objects.create(username='test1', password=PASSWORD)
         user2 = User.objects.create(username='test2', password=PASSWORD)
         user3 = User.objects.create(username='test3', password=PASSWORD)
-        group1 = Group.objects.create(title='test_group', openGrouper=user1, created_at=time, updated_at=time)
+        group1 = Group.objects.create(title='test_group', openGrouper=user1, createdAt=time, updatedAt=time)
         group1.inUser.add(user2)
         group1.save()
-        group2 = Group.objects.create(title='test_group2', openGrouper=user2, created_at=time, updated_at=time)
+        group2 = Group.objects.create(title='test_group2', openGrouper=user2, createdAt=time, updatedAt=time)
         group2.inUser.add(user3)
         group2.save()
-        GroupIn.objects.create(show_user=user2, target_group=group1, approved=False)
-        GroupIn.objects.create(show_user=user1, target_group=group2, approved=True)
+        GroupIn.objects.create(showUser=user2, targetGroup=group1, approved=False)
+        GroupIn.objects.create(showUser=user1, targetGroup=group2, approved=True)
     
     def test_get_groupIn(self):
         self.client = APIClient()
@@ -499,8 +499,8 @@ class GroupInTest(TestCase):
         self.assertEqual(groupIns.count(), 2)
         
         payload = {
-            'show_user': user3.id,
-            'target_group': group.id,
+            'showUser': user3.id,
+            'targetGroup': group.id,
             'approved': False
         }
         
@@ -523,7 +523,7 @@ class GroupInTest(TestCase):
         self.client.force_authenticate(user=user)
         
         group2 = Group.objects.get(title='test_group2')
-        groupIn = GroupIn.objects.get(show_user=user, target_group=group2)
+        groupIn = GroupIn.objects.get(showUser=user, targetGroup=group2)
         
         self.assertEqual(groupIn.approved, True)
         
@@ -545,8 +545,8 @@ class DMailTest(TestCase):
         user = User.objects.create(username='test1', password=PASSWORD)
         user2 = User.objects.create(username='test2', password=PASSWORD)
         user3 = User.objects.create(username='test3', password=PASSWORD)
-        DMail.objects.create(send_user=user, get_user=user2, message='test', created_at=time, updated_at=time)
-        DMail.objects.create(send_user=user2, get_user=user3, message='test', created_at=time, updated_at=time)
+        DMail.objects.create(sendUser=user, getUser=user2, message='test', createdAt=time, updatedAt=time)
+        DMail.objects.create(sendUser=user2, getUser=user3, message='test', createdAt=time, updatedAt=time)
         
     def test_get_dmail(self):
         self.client = APIClient()
@@ -559,7 +559,7 @@ class DMailTest(TestCase):
         
         res = self.client.get('/api/chat/dmail/')
         
-        dmails = DMail.objects.all().filter(Q(send_user=user) | Q(get_user=user))
+        dmails = DMail.objects.all().filter(Q(sendUser=user) | Q(getUser=user))
         
         self.assertEqual(dmails.count(), len(res.data))
         self.assertEqual(res.status_code, 200)
@@ -575,7 +575,7 @@ class DMailTest(TestCase):
         self.assertEqual(dmails.count(), 2)
         
         payload = {
-            'get_user': user2.id,
+            'getUser': user2.id,
             'message': 'test2'
         }
         
@@ -594,7 +594,7 @@ class DMailTest(TestCase):
         self.client.force_authenticate(user=user)
         
         user2 = User.objects.get(username='test2')
-        dmail = DMail.objects.get(send_user=user, get_user=user2)
+        dmail = DMail.objects.get(sendUser=user, getUser=user2)
         
         self.assertEqual(dmail.message, 'test')
         

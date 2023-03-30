@@ -13,7 +13,7 @@ class AllUserDiaryViewSet(viewsets.ModelViewSet):
     permissions = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
+        serializer.save(userId=self.request.user)
 
 
 class PersonDiaryViewSet(generics.ListAPIView):
@@ -23,5 +23,5 @@ class PersonDiaryViewSet(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        return self.queryset.filter(user_id=self.request.user)
+        return self.queryset.filter(userId=self.request.user)
 

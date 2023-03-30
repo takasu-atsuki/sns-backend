@@ -3,12 +3,12 @@ from core.models import Group, Chat, DMail, GroupIn
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
-    updated_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    createdAt = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    updatedAt = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
 
     class Meta:
         model = Group
-        fields = ('id', 'title', 'openGrouper', 'inUser', 'created_at', 'updated_at')
+        fields = ('id', 'title', 'openGrouper', 'inUser', 'createdAt', 'updatedAt')
         extra_kwargs = {'openGrouper': {'read_only': True}}
         
     def validate(self, data):
@@ -23,32 +23,32 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
-    updated_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
+    createdAt = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
+    updatedAt = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
 
     class Meta:
         model = Chat
-        fields = ('id', 'sender', 'group', 'message', 'created_at', 'updated_at')
+        fields = ('id', 'sender', 'group', 'message', 'createdAt', 'updatedAt')
         extra_kwargs = {'sender': {'read_only': True}}
 
 
 class GroupInSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupIn
-        fields = ('id', 'show_user', 'target_group', 'approved')
+        fields = ('id', 'showUser', 'targetGroup', 'approved')
 
 
 class DMailSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
-    updated_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
+    createdAt = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
+    updatedAt = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
 
     class Meta:
         model = DMail
-        fields = ('id', 'send_user', 'get_user', 'message', 'created_at', 'updated_at')
-        extra_kwargs = {'send_user': {'read_only': True}}
+        fields = ('id', 'sendUser', 'getUser', 'message', 'createdAt', 'updatedAt')
+        extra_kwargs = {'sendUser': {'read_only': True}}
 
     def validate(self, value):
         request = self.context['request']
-        if('get_user' in value and request.user == value['get_user']):
+        if('getUser' in value and request.user == value['getUser']):
             raise serializers.ValidationError('送信者と受信者が同じにすることはできません。')
         return value

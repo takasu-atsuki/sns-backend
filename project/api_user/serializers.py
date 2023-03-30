@@ -18,12 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
 
-    created_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
-    updated_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    createdAt = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    updatedAt = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
 
     class Meta:
         model = Profile
-        fields = ('id', 'userPro', 'nickName', 'created_at', 'updated_at', 'image')
+        fields = ('id', 'userPro', 'nickName', 'createdAt', 'updatedAt', 'image')
         extra_kwargs = {'userPro': {'read_only': True}}
 
 
