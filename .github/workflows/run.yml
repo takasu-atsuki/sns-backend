@@ -95,23 +95,23 @@ jobs:
         run: |
           cd terraform/environments/prod
           terraform validate -no-color
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        # if: github.event_name == 'pull_request'
-        run: |
-          cd terraform/environments/prod
-          terraform plan -no-color
-        # On push to main, build or change infrastructure according to Terraform configuration files
-        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      - name: Terraform Apply
-        if: github.event_name == 'push'
-        run: |
-          cd terraform/environments/prod
-          terraform apply -auto-approve
-      # - name: Terraform Dest
+      # # Generates an execution plan for Terraform
+      # - name: Terraform Plan
+      #   # if: github.event_name == 'pull_request'
       #   run: |
       #     cd terraform/environments/prod
-      #     terraform destroy -auto-approve
+      #     terraform plan -no-color
+      #   # On push to main, build or change infrastructure according to Terraform configuration files
+      #   # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      # - name: Terraform Apply
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     cd terraform/environments/prod
+      #     terraform apply -auto-approve
+      - name: Terraform Dest
+        run: |
+          cd terraform/environments/prod
+          terraform destroy -auto-approve
 
 # name: sns-ecs-backend-test-deploy
 
