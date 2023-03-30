@@ -43,6 +43,10 @@ resource "aws_ecs_task_definition" "this" {
           value = var.front_url
         },
         {
+          name = "ALB_DOMAIN"
+          value = "https://${var.dns_name}"
+        },
+        {
           name = "ALLOWED_HOSTS"
           value = var.arrowed_host
         },

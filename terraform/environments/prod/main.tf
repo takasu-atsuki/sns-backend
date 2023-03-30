@@ -58,6 +58,7 @@ module "ecs" {
   aws_s3_backet_name    = var.AWS_S3_BACKET_NAME
   debug                 = var.DEBUG
   secret_key            = var.SECRET_KEY
+  dns_name              = var.ALB_DOMAIN
 }
 
 module "route53" {

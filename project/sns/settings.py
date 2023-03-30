@@ -67,9 +67,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
-    # os.getenv('FRONT_URI'),
-    'https://master.dtr841l8v5r9l.amplifyapp.com',
-    'https://proxy-pass.shop'
+    os.getenv('FRONT_URI'),
+    os.getenv('ALB_DOMAIN')
 ]
 
 ROOT_URLCONF = 'sns.urls'

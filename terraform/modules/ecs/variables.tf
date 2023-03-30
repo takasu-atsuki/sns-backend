@@ -13,6 +13,7 @@ variable "aws_secret_access_key" {}
 variable "aws_s3_backet_name" {}
 variable "debug" {}
 variable "secret_key" {}
+variable "dns_name" {}
 
 variable "app_name" {
   type = string
