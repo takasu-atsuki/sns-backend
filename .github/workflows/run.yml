@@ -182,7 +182,7 @@ jobs:
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py migrate
       #     docker run -e SQL_NAME=$SQL_NAME -e SQL_USER=$SQL_USER -e SQL_PASSWORD=$SQL_PASSWORD -e SQL_HOST=$SQL_HOST -e SQL_PORT=$SQL_PORT -e SECRET_KEY=$SECRET_KEY django python manage.py createsuperuser --username $SQL_USER --password $SQL_PASS
 
-      Terraformで作った環境を初期化
+      # Terraformで作った環境を初期化
       - name: Terraform Dest
         run: |
           cd terraform/environments/prod
