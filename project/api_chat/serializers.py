@@ -15,8 +15,6 @@ class GroupSerializer(serializers.ModelSerializer):
         request = self.context['request']
         if('inUser' in data):
             for user in data['inUser']:
-                if(request.user == user):
-                    raise serializers.ValidationError('グループ作成者はグループ作成者自身を招待できません。')
                 if(data['inUser'].count(user) >= 2):
                     raise serializers.ValidationError('同じユーザーを招待することはできません。')
         return data
