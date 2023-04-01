@@ -84,7 +84,7 @@ class ProfileTest(TestCase):
             'nickName': 'hoge',
             'createdAt': time,
             'updatedAt': time,
-            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/image/noimage.png', 'rb'),
+            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/media/image/noimage.png', 'rb'),
         }
         
         res = self.client.post('/api/user/profile/', payload)
@@ -105,7 +105,7 @@ class ProfileTest(TestCase):
         
         payload = {
             'nickName': 'update_name',
-            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/image/noimage.png', 'rb'),
+            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/media/image/noimage.png', 'rb'),
         }
         
         res = self.client.patch(f'/api/user/profile/{profile.id}/' , payload)
@@ -410,7 +410,7 @@ class DiaryTest(TestCase):
         self.client.force_authenticate(user=user)
         
         payload = {
-            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/image/noimage.png', 'rb'),
+            'image': open((os.path.dirname(os.path.abspath(__file__))) + '/../media/media/image/noimage.png', 'rb'),
             'message': 'test3'
         }
         
