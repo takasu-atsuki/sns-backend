@@ -85,7 +85,7 @@ class GroupIn(models.Model):
         unique_together = (('showUser', 'targetGroup'),)
 
     def __str__(self):
-        return str(self.target_group) + '--------->' + str(self.show_user)
+        return str(self.targetGroup) + '--------->' + str(self.showUser)
 
 
 class DMail(models.Model):
