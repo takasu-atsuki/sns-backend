@@ -166,7 +166,7 @@ jobs:
       #     aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py makemigrations"
       #     aws ecs execute-command --cluster $ECS_CLUSTER_NAME --task $ECS_TASK_NAME --container $ECS_CONTAINER_APP_NAME --interactive --command "python manage.py migrate"
 
-      Terraformで作った環境を初期化
+      # Terraformで作った環境を初期化
       - name: Terraform Dest
         run: |
           cd terraform/environments/prod
