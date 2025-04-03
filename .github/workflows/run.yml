@@ -44,6 +44,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with: include-hidden-files: true
 
       # AWSの認証(OIDC)
       - name: Configure AWS credentials from IAM Role
